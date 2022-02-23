@@ -1,0 +1,9 @@
+.form__date-container {
+  padding: 34px 36px 34px;
+}
+
+@media screen and (max-width:768px) {
+  .form__date-container {
+    padding: 25px 22px 25px;
+  }
+}
