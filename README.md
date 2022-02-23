@@ -11,12 +11,5 @@
 3. Flex-box позиционировани
 4. Grid
 5. БЭМ - методологии
-=======
-1. HTML
-2. CSS
-3. Flex-box позиционирования
-4. Grid
-5. БЭМ - методологии
-
 
 ### [ссылка на проект](https://ivan-antipenko.github.io/mesto-project/)
