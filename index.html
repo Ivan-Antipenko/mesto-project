@@ -32,15 +32,15 @@
       <article class="element">
         <img class="element__image" src="./images/karachaevsk.jpg" alt="Карачаевск">
         <div class="element__box">
-          <h3 class="element__title">Карачаевск</h3>
-          <button type="button" class="element__like element__like_status_active"></button>
+          <h2 class="element__title">Карачаевск</h2>
+          <button type="button" class="element__like element__like_active"></button>
         </div>
       </article>
 
       <article class="element">
         <img class="element__image" src="./images/elbrus.jpg" alt="Эльбрус">
         <div class="element__box">
-          <h3 class="element__title">Гора Эльбрус</h3>
+          <h2 class="element__title">Гора Эльбрус</h2>
           <button type="button" class="element__like"></button>
         </div>
       </article>
@@ -48,7 +48,7 @@
       <article class="element">
         <img class="element__image" src="./images/dombai.jpg" alt="Домбай">
         <div class="element__box">
-          <h3 class="element__title">Домбай</h3>
+          <h2 class="element__title">Домбай</h2>
           <button type="button" class="element__like"></button>
         </div>
       </article>
@@ -56,7 +56,7 @@
       <article class="element">
         <img class="element__image" src="./images/elbrus.jpg" alt="Эльбрус">
         <div class="element__box">
-          <h3 class="element__title">Гора Эльбрус</h3>
+          <h2 class="element__title">Гора Эльбрус</h2>
           <button type="button" class="element__like"></button>
         </div>
       </article>
@@ -64,7 +64,7 @@
       <article class="element">
         <img class="element__image" src="./images/dombai.jpg" alt="Домбай">
         <div class="element__box">
-          <h3 class="element__title">Домбай</h3>
+          <h2 class="element__title">Домбай</h2>
           <button type="button" class="element__like"></button>
         </div>
       </article>
@@ -72,7 +72,7 @@
       <article class="element">
         <img class="element__image" src="./images/karachaevsk.jpg" alt="Черкесия">
         <div class="element__box">
-          <h3 class="element__title">Карачаево-Черкесия</h3>
+          <h2 class="element__title">Карачаево-Черкесия</h2>
           <button type="button" class="element__like"></button>
         </div>
       </article>
@@ -83,16 +83,18 @@
   <footer class="footer">
     <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
   </footer>
+
+
   <div class="popup">
-    <form class="form">
-      <img class="form__close-icon" src="./images/close-icon.svg" alt="Закрывающая иконка">
-      <div class="form__date-container">
-        <h2 class="form__title">Редактировать профиль</h2>
-        <input type="text" class="form__name" placeholder="Имя">
-        <input type="text" class="form__about" placeholder="О себе">
-        <button type="button" class="form__button">Сохранить</button>
-      </div>
-    </form>
+    <div class="popup__data-container">
+      <button class="popup__close-button"></button>
+      <h2 class="popup__title">Редактировать профиль</h2>
+      <form class="popup__form">
+        <input type="text" class="popup__form-input" name="name" placeholder="Имя" required>
+        <input type="text" class="popup__form-input" name="about" placeholder="О себе" required>
+        <button type="submit" class="popup__form-button">Сохранить</button>
+      </form>
+    </div>
   </div>
 
 </body>

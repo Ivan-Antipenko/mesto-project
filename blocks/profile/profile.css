@@ -7,16 +7,16 @@
   justify-content: space-between;
 }
 
-@media screen and (max-width: 980px){
+@media screen and (max-width: 980px) {
   .profile {
     max-width: calc(100% - 96px);
-  }  
+  }
 }
 
-
-@media screen and (max-width: 768px){
+@media screen and (max-width: 768px) {
   .profile {
+    padding-top: 42px;
     flex-direction: column;
     max-width: calc(100% - 38px);
-  }  
+  }
 }

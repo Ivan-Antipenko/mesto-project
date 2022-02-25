@@ -5,11 +5,15 @@
   margin: 0;
   grid-column: 1;
   grid-row: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 310px;
 }
 
-@media screen and (max-width:768px){
+@media screen and (max-width:768px) {
   .profile__name {
     font-size: 27px;
-    line-height: 32.68px;
+    line-height: 33px;
   }
 }

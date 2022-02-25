@@ -6,10 +6,10 @@
   column-gap: 18px;
 }
 
-@media screen and (max-width:768px){
+@media screen and (max-width:768px) {
   .profile__description {
     grid-template-columns: 1fr 18px;
-    margin:22.25px 0 0 0;
+    margin-top: 22.25px;
     column-gap: 10px;
   }
 }
