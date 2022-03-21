@@ -11,5 +11,6 @@
 3. Flex-box позиционировани
 4. Grid
 5. БЭМ - методологии
+6. Javascript
 
 ### [ссылка на проект](https://ivan-antipenko.github.io/mesto-project/)
