@@ -88,6 +88,7 @@ popupFormAddPlace.addEventListener('submit', (evt) => {
   renderCard(creatingCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value));
   popupFormPlaceNameField.value = "";
   popupFormPlaceLinkField.value = "";
+  closePopup(popupAdd);
 });
 //===============================================================
 
