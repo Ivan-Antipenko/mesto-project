@@ -4,43 +4,18 @@ import {
   popupViewer
 } from './data';
 
-import { openPopup } from './utils';
+import { openPopup } from './modal';
 
-const initialCards = [{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
 
 // Конструктор карточек
-export function creatingCard(cardName, cardLink) {
+function createCard(cardName, cardLink) {
   const cardElement = cardConstructor.querySelector('.element').cloneNode(true);
   const elementImageContent = cardElement.querySelector('.element__image');
   const popupViewerImage = document.querySelector('.popup__image');
   const popupImageDescription = document.querySelector('.popup__image-description')
   cardElement.querySelector('.element__title').textContent = cardName;
   elementImageContent.src = cardLink;
-  elementImageContent.alt = cardLink;
+  elementImageContent.alt = cardName;
 
   cardElement.addEventListener('click', (evt) => {
     if (evt.target.classList.contains('element__like')) {
@@ -57,16 +32,10 @@ export function creatingCard(cardName, cardLink) {
   return cardElement;
 };
 
-// Создание карточек
-function addingCard() {
-  initialCards.reverse().forEach((card) => {
-    renderCard(creatingCard(card.name, card.link));
-  });
-}
 
 // Выведение карточек на экран
-export function renderCard(cardElement) {
+function renderCard(cardElement) {
   cardsSection.prepend(cardElement);
 };
 
-export { addingCard }
+export { createCard, renderCard }

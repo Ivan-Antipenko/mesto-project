@@ -16,6 +16,7 @@ const popupFormPlaceNameField = document.querySelector('.popup__form-input_place
 const popupFormPlaceLinkField = document.querySelector('.popup__form-input_place-link'); // Инпут для ссылки на изображение
 const profileName = document.querySelector('.profile__name'); // Имя профиля
 const profileAbout = document.querySelector('.profile__about'); // "О себе"
+const addButton = document.querySelector('.popup__form-button_add-place');
 
 export {
   cardConstructor,
@@ -35,5 +36,6 @@ export {
   popupFormAddPlace,
   popupFormPlaceLinkField,
   popupFormPlaceNameField,
-  popupFormEditProfile
+  popupFormEditProfile,
+  addButton
 }

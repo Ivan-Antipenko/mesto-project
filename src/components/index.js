@@ -1,5 +1,9 @@
 import '../pages/index.css'
 
+import { openPopup, closePopup } from './modal'
+
+import { disableButton } from './utils'
+
 import {
   buttonEditProfile,
   buttonEditPopupClose,
@@ -10,32 +14,73 @@ import {
   popupAdd,
   popupViewer,
   popupFormAddPlace,
-  popupFormEditProfile
+  popupFormEditProfile,
+  popupFormPlaceNameField,
+  popupFormPlaceLinkField,
+  popupFormEditProfileFieldName,
+  popupFormEditProfileFieldAbout,
+  profileName,
+  profileAbout,
+  addButton
 } from './data';
 
-import {
-  openPopup,
-  openEditPopup,
-  closePopup
-} from './utils';
 
-import { addingCard } from './card';
+import { renderCard, createCard } from './card';
 
 import { enableValidation } from './validate'
 
-import { submitAddPlace, submitProfileChanges } from './modal'
+// Массив с карточками
+const initialCards = [{
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
 
-addingCard();
+
+// Создание карточек
+function renderInitialCards() {
+  initialCards.reverse().forEach((card) => {
+    renderCard(createCard(card.name, card.link));
+  });
+}
+
+renderInitialCards();
 
 enableValidation({
   formSelector: '.popup__form',
-  inputSelector: '.popup__form__input',
-  inputElementError: ".error",
-  submitBtn: '.popup__form-button',
-  submitBtnDisabled: '.popup__form-button_disabled',
+  inputSelector: '.popup__form-input',
+  submitButtonSelector: '.popup__form-button',
+  inactiveButtonClass: 'popup__form-button_type_disabled',
+  errorClass: 'error_active'
 });
 
 
+// Открытие попапа Edit
+function openEditPopup(popup) {
+  openPopup(popup);
+  popupFormEditProfileFieldName.value = profileName.textContent;
+  popupFormEditProfileFieldAbout.value = profileAbout.textContent;
+};
 
 
 // Открытие и закрытие попапа edit
@@ -57,6 +102,26 @@ buttonAddPopupClose.addEventListener('click', () => {
 buttonImagePopupClose.addEventListener('click', () => {
   closePopup(popupViewer);
 });
+
+
+// Добавление карточек
+function submitAddPlace(evt) {
+  evt.preventDefault();
+  renderCard(createCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value));
+  popupFormPlaceNameField.value = "";
+  popupFormPlaceLinkField.value = "";
+  disableButton(addButton);
+  closePopup(popupAdd);
+};
+
+// Сохранение изменений профиля
+function submitProfileChanges(evt) {
+  evt.preventDefault();
+  profileName.textContent = popupFormEditProfileFieldName.value;
+  profileAbout.textContent = popupFormEditProfileFieldAbout.value;
+  closePopup(popupEdit);
+};
+
 
 popupFormAddPlace.addEventListener('submit', submitAddPlace);
 popupFormEditProfile.addEventListener('submit', submitProfileChanges);

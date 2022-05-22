@@ -1,35 +1,31 @@
-import { renderCard, creatingCard } from './card'
-
-import {
-  popupFormPlaceNameField,
-  popupFormPlaceLinkField,
-  popupAdd,
-  profileName,
-  popupFormEditProfileFieldName,
-  profileAbout,
-  popupFormEditProfileFieldAbout,
-  popupEdit
-} from './data'
-
-import { closePopup } from './utils'
-
-// Добавление карточек
-function submitAddPlace(evt) {
-  evt.preventDefault();
-  renderCard(creatingCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value));
-  popupFormPlaceNameField.value = "";
-  popupFormPlaceLinkField.value = "";
-  closePopup(popupAdd);
+// Открытие попапов
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closePopupEscape);
+  document.addEventListener('click', closePopupOverlay);
 };
 
-
-// Сохранение изменений профиля
-function submitProfileChanges(evt) {
-  evt.preventDefault();
-  profileName.textContent = popupFormEditProfileFieldName.value;
-  profileAbout.textContent = popupFormEditProfileFieldAbout.value;
-  closePopup(popupEdit);
+// Закрытие попапов
+function closePopup(popup) {
+  popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closePopupEscape);
+  document.removeEventListener('mousedown', closePopupOverlay);
 };
 
+// Закрытие попапов клавишей 'Escape'
+function closePopupEscape(evt) {
+  if (evt.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup)
+  };
+};
 
-export { submitAddPlace, submitProfileChanges }
+// Закрытие попвпов кликом на оверлей
+function closePopupOverlay(evt) {
+  if (evt.target.classList.contains('popup_opened')) {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup)
+  };
+};
+
+export { openPopup, closePopup }

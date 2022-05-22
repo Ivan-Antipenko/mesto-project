@@ -1,49 +1,17 @@
-import {
-  popupFormEditProfileFieldName,
-  profileName,
-  popupFormEditProfileFieldAbout,
-  profileAbout
-} from './data';
+import { hasInvalidInput } from './validate'
 
-// Открытие попапа Edit
-function openEditPopup(popup) {
-  openPopup(popup);
-  popupFormEditProfileFieldName.value = profileName.textContent;
-  popupFormEditProfileFieldAbout.value = profileAbout.textContent;
+export function disableButton(button) {
+  button.disabled = true;
+  button.classList.add('popup__form-button_type_disabled');
 };
 
-// Открытие попапов
-function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', closePopupEscape);
-  document.addEventListener('click', closePopupOverlay);
-};
-
-// Закрытие попапов
-function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', closePopupEscape);
-  document.removeEventListener('click', closePopupOverlay);
-};
-
-// Закрытие попапов клавишей 'Escape'
-function closePopupEscape(evt) {
-  let openedPopup = document.querySelector('.popup_opened');
-  if (evt.key === 'Escape') {
-    closePopup(openedPopup)
-  };
-};
-
-// Закрытие попвпов кликом на оверлей
-function closePopupOverlay(evt) {
-  let openedPopup = document.querySelector('.popup_opened');
-  if (evt.target.classList.contains('popup_opened')) {
-    closePopup(openedPopup)
-  };
-};
-
-export {
-  openEditPopup,
-  openPopup,
-  closePopup
+// Переключение кнопки
+export function toggleButtonState(inputList, button, config) {
+  if (hasInvalidInput(inputList)) {
+    button.disabled = true;
+    button.classList.add(config.inactiveButtonClass);
+  } else {
+    button.disabled = false;
+    button.classList.remove(config.inactiveButtonClass);
+  }
 }
