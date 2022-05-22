@@ -12,5 +12,6 @@
 4. Grid
 5. БЭМ - методологии
 6. JavaScript
+7. Webpack
 
 ### [ссылка на проект](https://ivan-antipenko.github.io/mesto-project/)

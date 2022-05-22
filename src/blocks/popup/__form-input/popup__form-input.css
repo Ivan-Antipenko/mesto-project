@@ -18,3 +18,7 @@
   background-color: rgba(0, 0, 0, 0.03);
   border-radius: 3px;
 }
+
+.popup__form-input:invalid {
+  border-bottom: 1px solid red;
+}

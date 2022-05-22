@@ -1,0 +1,12 @@
+.popup__form-button_type_disabled {
+  border: 1px solid #000000;
+  border-radius: 2px;
+  background-color: white;
+  color: black;
+  opacity: 20%;
+  cursor: default;
+}
+
+.popup__form-button_type_disabled:hover {
+  opacity: 20%;
+}
