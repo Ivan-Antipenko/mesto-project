@@ -16,6 +16,12 @@ const popupFormPlaceNameField = document.querySelector('.popup__form-input_place
 const popupFormPlaceLinkField = document.querySelector('.popup__form-input_place-link'); // Инпут для ссылки на изображение
 const profileName = document.querySelector('.profile__name'); // Имя профиля
 const profileAbout = document.querySelector('.profile__about'); // "О себе"
+const profileAvatar = document.querySelector('.profile__avatar'); // Аватар
+const avatarButton = document.querySelector('.profile__avatar-button'); // Кнопка аватара
+const avatarSubmitButton = document.querySelector('.popup__form-button-change-avatar'); // Кнопка сабмита аватара
+const popupAvatar = document.querySelector('.popup-avatar'); // Попап аватара
+const avatarInput = document.querySelector('.popup__form-input_avatar-link'); // Инпут аватара
+const avatarForm = document.querySelector('.popup__form_change-avatar'); // Форма аватара
 const addButton = document.querySelector('.popup__form-button_add-place');
 
 export {
@@ -37,5 +43,11 @@ export {
   popupFormPlaceLinkField,
   popupFormPlaceNameField,
   popupFormEditProfile,
-  addButton
+  addButton,
+  profileAvatar,
+  avatarButton,
+  popupAvatar,
+  avatarInput,
+  avatarForm,
+  avatarSubmitButton
 }

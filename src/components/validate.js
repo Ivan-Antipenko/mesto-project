@@ -1,4 +1,14 @@
-import { toggleButtonState } from './utils'
+// Переключение кнопки
+function toggleButtonState(inputList, button, config) {
+  if (hasInvalidInput(inputList)) {
+    button.disabled = true;
+    button.classList.add(config.inactiveButtonClass);
+  } else {
+    button.disabled = false;
+    button.classList.remove(config.inactiveButtonClass);
+  }
+}
+
 
 // Показать ошибку
 function showError(popup, input, errorMessage, config) {

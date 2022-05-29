@@ -2,6 +2,8 @@ import '../pages/index.css'
 
 import { openPopup, closePopup } from './modal'
 
+import { renderCard, createCard, renderNewCard } from './card';
+
 import { disableButton } from './utils'
 
 import {
@@ -21,50 +23,28 @@ import {
   popupFormEditProfileFieldAbout,
   profileName,
   profileAbout,
-  addButton
+  addButton,
+  avatarButton,
+  popupAvatar,
+  avatarInput,
+  avatarForm,
+  profileAvatar,
+  avatarSubmitButton
 } from './data';
 
 
-import { renderCard, createCard } from './card';
-
 import { enableValidation } from './validate'
 
-// Массив с карточками
-const initialCards = [{
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
+import {
+  sendProfileInfo,
+  getProfileInfo,
+  getCards,
+  sendNewCard,
+  sendAvatarLink,
+  sendLike,
+  deleteLike,
+} from './api';
 
-
-// Создание карточек
-function renderInitialCards() {
-  initialCards.reverse().forEach((card) => {
-    renderCard(createCard(card.name, card.link));
-  });
-}
-
-renderInitialCards();
 
 enableValidation({
   formSelector: '.popup__form',
@@ -102,26 +82,63 @@ buttonAddPopupClose.addEventListener('click', () => {
 buttonImagePopupClose.addEventListener('click', () => {
   closePopup(popupViewer);
 });
+avatarButton.addEventListener('click', () => {
+  openPopup(popupAvatar)
+})
 
 
-// Добавление карточек
-function submitAddPlace(evt) {
+// Смена аватарки
+function submitProfileAvatar(evt) {
   evt.preventDefault();
-  renderCard(createCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value));
-  popupFormPlaceNameField.value = "";
-  popupFormPlaceLinkField.value = "";
-  disableButton(addButton);
-  closePopup(popupAdd);
+  sendAvatarLink(avatarInput.value)
+    .then(() => {
+      profileAvatar.src = avatarInput.value
+      closePopup(popupAvatar);
+      disableButton(avatarSubmitButton)
+      evt.target.reset();
+      getProfileInfo();
+    })
 };
+
 
 // Сохранение изменений профиля
 function submitProfileChanges(evt) {
   evt.preventDefault();
-  profileName.textContent = popupFormEditProfileFieldName.value;
-  profileAbout.textContent = popupFormEditProfileFieldAbout.value;
-  closePopup(popupEdit);
+  sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
+    .then(() => {
+      profileName.textContent = popupFormEditProfileFieldName.value;
+      profileAbout.textContent = popupFormEditProfileFieldAbout.value;
+      closePopup(popupEdit);
+    })
 };
 
 
+
+// Добавление новой карточки
+function submitAddPlace(evt) {
+  evt.preventDefault();
+  sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value)
+    .then(getCards())
+    .then((res) => {
+      renderNewCard(createCard(res))
+      disableButton(addButton);
+      closePopup(popupAdd);
+      evt.target.reset();
+    })
+}
+
+Promise.all([getProfileInfo(), getCards()])
+  .then(([userData, cardsData]) => {
+    profileAvatar.src = userData.avatar;
+    profileName.textContent = userData.name;
+    profileAbout.textContent = userData.about;
+    const cardsArray = Array.from(cardsData)
+    cardsArray.forEach((card) => {
+      renderCard(createCard(card, userData._id, ));
+    })
+  })
+  .catch((err) => console.log(err));
+
+avatarForm.addEventListener('submit', submitProfileAvatar);
 popupFormAddPlace.addEventListener('submit', submitAddPlace);
 popupFormEditProfile.addEventListener('submit', submitProfileChanges);

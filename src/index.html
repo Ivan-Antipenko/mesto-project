@@ -16,10 +16,12 @@
 
     <section class="profile">
       <div class="profile__data">
-        <img class="profile__avatar" src="<%=require('./images/profile__avatar.jpg')%>" alt="Аватар">
+        <button class="profile__avatar-button">
+          <img class="profile__avatar" src="#" alt="Аватар">
+        </button>
         <div class="profile__description">
-          <h1 class="profile__name">Жак-Ив Кусто</h1>
-          <p class="profile__about">Исследователь океана</p>
+          <h1 class="profile__name">#</h1>
+          <p class="profile__about">#</p>
           <button class="profile__edit-button" type="button"></button>
         </div>
       </div>
@@ -72,13 +74,28 @@
     </div>
   </div>
 
+  <div class="popup popup-avatar">
+    <div class="popup__data-container">
+      <button type="button" class="popup__close-button popup-add__close-button"></button>
+      <h2 class="popup__title">Обновить аватар</h2>
+      <form class="popup__form popup__form_change-avatar" name="change-avatar" novalidate>
+        <input id="link" type="url" class="popup__form-input popup__form-input_avatar-link" name="avatar-link" placeholder="Ссылка на картинку" required>
+        <span id="link-error" class="error error-avatar-link"></span>
+        <button type="submit" class="popup__form-button popup__form-button-change-avatar">Сохранить</button>
+      </form>
+    </div>
+  </div>
+
   <template id="card-constructor">
     <article class="element">
       <button class="element__delete-icon" type="button"></button>
       <img class="element__image" src="" alt="">
       <div class="element__box">
         <h2 class="element__title"></h2>
-        <button type="button" class="element__like"></button>
+        <div class="element__likes-wrapper">
+          <button type="button" class="element__like"></button>
+          <p class="element__likes-counter">aasdasdasdasd</p>
+        </div>
       </div>
     </article>
   </template>

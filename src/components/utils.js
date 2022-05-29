@@ -1,17 +1,28 @@
-import { hasInvalidInput } from './validate'
+import { deleteLike, sendLike } from './api'
 
-export function disableButton(button) {
+// Отключение кнопки
+function disableButton(button) {
   button.disabled = true;
   button.classList.add('popup__form-button_type_disabled');
 };
 
-// Переключение кнопки
-export function toggleButtonState(inputList, button, config) {
-  if (hasInvalidInput(inputList)) {
-    button.disabled = true;
-    button.classList.add(config.inactiveButtonClass);
-  } else {
-    button.disabled = false;
-    button.classList.remove(config.inactiveButtonClass);
+
+// Изменения лайков
+function changeLike(button, _id) {
+  if (button.classList.contains('element__like_active')) {
+    sendLike(_id)
+      .then((data) => {
+        console.log(data)
+        likesCounter.textContent = data.likes.length;
+      })
+  } else if (!button.classList.contains('element__like_active')) {
+    deleteLike(_id)
+      .then((data) => {
+        console.log(data)
+        likesCounter.textContent = data.likes.length;
+      })
   }
-}
+};
+
+
+export { changeLike, disableButton }
