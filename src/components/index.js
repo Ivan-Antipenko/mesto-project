@@ -1,10 +1,12 @@
 import '../pages/index.css'
 
+import { disableButton } from './validate';
+
 import { openPopup, closePopup } from './modal'
 
-import { renderCard, createCard, renderNewCard } from './card';
+import { createCard } from './card';
 
-import { disableButton } from './utils'
+import { renderCard, renderNewCard, loading } from './utils'
 
 import {
   buttonEditProfile,
@@ -29,7 +31,8 @@ import {
   avatarInput,
   avatarForm,
   profileAvatar,
-  avatarSubmitButton
+  avatarSubmitButton,
+  profileSubmitButton
 } from './data';
 
 
@@ -41,8 +44,6 @@ import {
   getCards,
   sendNewCard,
   sendAvatarLink,
-  sendLike,
-  deleteLike,
 } from './api';
 
 
@@ -51,6 +52,7 @@ enableValidation({
   inputSelector: '.popup__form-input',
   submitButtonSelector: '.popup__form-button',
   inactiveButtonClass: 'popup__form-button_type_disabled',
+  invalidInput: 'popup__form-input_type_ivalid',
   errorClass: 'error_active'
 });
 
@@ -90,6 +92,7 @@ avatarButton.addEventListener('click', () => {
 // Смена аватарки
 function submitProfileAvatar(evt) {
   evt.preventDefault();
+  loading(true, avatarSubmitButton)
   sendAvatarLink(avatarInput.value)
     .then(() => {
       profileAvatar.src = avatarInput.value
@@ -98,17 +101,24 @@ function submitProfileAvatar(evt) {
       evt.target.reset();
       getProfileInfo();
     })
+    .finally(() => {
+      loading(false, avatarSubmitButton)
+    })
 };
 
 
 // Сохранение изменений профиля
 function submitProfileChanges(evt) {
   evt.preventDefault();
+  loading(true, profileSubmitButton)
   sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
     .then(() => {
       profileName.textContent = popupFormEditProfileFieldName.value;
       profileAbout.textContent = popupFormEditProfileFieldAbout.value;
       closePopup(popupEdit);
+    })
+    .finally(() => {
+      loading(false, profileSubmitButton)
     })
 };
 
@@ -117,13 +127,18 @@ function submitProfileChanges(evt) {
 // Добавление новой карточки
 function submitAddPlace(evt) {
   evt.preventDefault();
-  sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value)
-    .then(getCards())
-    .then((res) => {
-      renderNewCard(createCard(res))
+  loading(true, addButton)
+  Promise.all([sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value), getProfileInfo()])
+    .then(([cardsData, userData]) => {
+      renderNewCard(createCard(cardsData, userData._id))
+    })
+    .then(() => {
       disableButton(addButton);
       closePopup(popupAdd);
       evt.target.reset();
+    })
+    .finally(() => {
+      loading(false, addButton)
     })
 }
 

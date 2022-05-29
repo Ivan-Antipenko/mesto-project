@@ -9,12 +9,18 @@ function toggleButtonState(inputList, button, config) {
   }
 }
 
+// Отключение кнопки
+function disableButton(button) {
+  button.disabled = true;
+  button.classList.add('popup__form-button_type_disabled');
+};
 
 // Показать ошибку
 function showError(popup, input, errorMessage, config) {
   const errorElement = popup.querySelector(`#${input.id}-error`);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(config.errorClass);
+  input.classList.add(config.invalidInput);
 }
 
 
@@ -23,6 +29,7 @@ function hideError(popup, input, config) {
   const errorElement = popup.querySelector(`#${input.id}-error`);
   errorElement.textContent = '';
   errorElement.classList.remove(config.errorClass);
+  input.classList.remove(config.invalidInput);
 
 }
 
@@ -66,4 +73,4 @@ function enableValidation(config) {
   })
 }
 
-export { enableValidation }
+export { enableValidation, disableButton }

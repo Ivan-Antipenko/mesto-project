@@ -23,6 +23,7 @@ const popupAvatar = document.querySelector('.popup-avatar'); // Попап ав�
 const avatarInput = document.querySelector('.popup__form-input_avatar-link'); // Инпут аватара
 const avatarForm = document.querySelector('.popup__form_change-avatar'); // Форма аватара
 const addButton = document.querySelector('.popup__form-button_add-place');
+const profileSubmitButton = document.querySelector('.popup__form-button-profile-submit');
 
 export {
   cardConstructor,
@@ -49,5 +50,6 @@ export {
   popupAvatar,
   avatarInput,
   avatarForm,
-  avatarSubmitButton
+  avatarSubmitButton,
+  profileSubmitButton
 }

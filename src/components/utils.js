@@ -1,28 +1,23 @@
-import { deleteLike, sendLike } from './api'
+import { cardsSection } from './data'
 
-// Отключение кнопки
-function disableButton(button) {
-  button.disabled = true;
-  button.classList.add('popup__form-button_type_disabled');
+
+// Выведение карточек на экран
+function renderCard(cardElement) {
+  cardsSection.append(cardElement);
+};
+
+// Выведение новой карточки
+function renderNewCard(cardElement) {
+  cardsSection.prepend(cardElement);
 };
 
 
-// Изменения лайков
-function changeLike(button, _id) {
-  if (button.classList.contains('element__like_active')) {
-    sendLike(_id)
-      .then((data) => {
-        console.log(data)
-        likesCounter.textContent = data.likes.length;
-      })
-  } else if (!button.classList.contains('element__like_active')) {
-    deleteLike(_id)
-      .then((data) => {
-        console.log(data)
-        likesCounter.textContent = data.likes.length;
-      })
+function loading(isLoading, button) {
+  if (isLoading) {
+    button.textContent = 'Сохранение...'
+  } else {
+    button.textContent = 'Сохранить'
   }
-};
+}
 
-
-export { changeLike, disableButton }
+export { renderCard, renderNewCard, loading }

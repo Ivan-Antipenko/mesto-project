@@ -47,7 +47,7 @@
         <span id="name-error" class="error name-error"></span>
         <input id="about" type="text" class="popup__form-input popup__form-input_field-about" name="about" placeholder="О себе" minlength="2" maxlength="200" required>
         <span id="about-error" class="error about-error"></span>
-        <button type="submit" class="popup__form-button">Сохранить</button>
+        <button type="submit" class="popup__form-button popup__form-button-profile-submit">Сохранить</button>
       </form>
     </div>
   </div>
@@ -57,7 +57,7 @@
       <button type="button" class="popup__close-button popup-add__close-button"></button>
       <h2 class="popup__title">Новое место</h2>
       <form class="popup__form popup__form_add-place" name="add-place" novalidate>
-        <input id="place" type="text" class="popup__form-input popup__form-input_place-name" name="place-name" placeholder="Название" required>
+        <input id="place" type="text" class="popup__form-input popup__form-input_place-name" name="place-name" placeholder="Название" minlength="2" maxlength="40" required>
         <span id="place-error" class="error error-place-name"></span>
         <input id="link" type="url" class="popup__form-input popup__form-input_place-link" name="place-link" placeholder="Ссылка на картинку" required>
         <span id="link-error" class="error error-place-link"></span>
