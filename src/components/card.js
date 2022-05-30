@@ -1,78 +1,89 @@
 import {
   cardConstructor,
-  popupViewer,
 } from './data';
 
-import { deleteCard, sendLike, deleteLike } from './api'
+import {
+  changeLikes,
+  requestDelete
+} from './index'
 
-import { openPopup } from './modal';
+import { openPopup } from './modal'
 
-
-// Изменения лайков
-function changeLike(button, _id, counter) {
-  if (button.classList.contains('element__like_active')) {
-    sendLike(_id)
-      .then((data) => {
-        counter.textContent = data.likes.length;
-      })
-  } else if (!button.classList.contains('element__like_active')) {
-    deleteLike(_id)
-      .then((data) => {
-        counter.textContent = data.likes.length;
-      })
+// Проверка лайков
+function isLiked(likes, myId) {
+  if (likes.some((like) => like._id === myId)) {
+    return true
+  } else {
+    return false
   }
+}
+
+// Открытие попапов изображений
+function openPreviewPicture(data) {
+  const popupViewer = document.querySelector('.popup-viewer')
+  const popupViewerImage = document.querySelector('.popup__image');
+  const popupImageDescription = document.querySelector('.popup__image-description')
+  popupViewerImage.src = data.link;
+  popupViewerImage.alt = data.name;
+  popupImageDescription.textContent = data.name;
+  openPopup(popupViewer);
 };
 
-// Функция добавления слушателей
-function setCardEventListener(card, counter, _id, popupImage, popupDescription) {
-  card.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('element__like')) {
-      evt.target.classList.toggle('element__like_active')
-      changeLike(evt.target, _id, counter)
-    } else if (evt.target.classList.contains('element__delete-icon')) {
-      deleteCard(_id)
-        .then(evt.target.closest('.element').remove());
-    } else if (evt.target.classList.contains('element__image')) {
-      openPopup(popupViewer);
-      popupImage.src = card.querySelector('.element__image').src;
-      popupDescription.textContent = card.querySelector('.element__title').textContent;
-      popupImage.alt = popupDescription.textContent;
-    }
+// Изменение лайка в зависимости от наличия айди
+function updateLikesView(cardElement, myId, likes) {
+  const likeButton = cardElement.querySelector('.element__like');
+  const likesCounter = cardElement.querySelector('.element__likes-counter');
+  likesCounter.textContent = likes.length.toString();
+  if (isLiked(likes, myId)) {
+    likeButton.classList.add('element__like_active');
+  } else {
+    likeButton.classList.remove('element__like_active');
+  }
+}
+
+// Проверка id для кнопки удаления
+function checkId(button, owner, myId) {
+  if (owner._id !== myId) {
+    button.classList.add('element__delete-icon_type_hidden')
+  }
+}
+
+// Клонирование элемента
+function getTemplate() {
+  return cardConstructor.querySelector('.element').cloneNode(true);
+}
+
+// Слушатели для карточки
+function setCardEventListener(cardImage, cardDeleteButton, likeButton, { name, link }, _id, cardElement) {
+  cardImage.addEventListener('click', () => {
+    openPreviewPicture({ name, link })
+  })
+  cardDeleteButton.addEventListener('click', () => {
+    requestDelete(_id, cardElement);
+  })
+  likeButton.addEventListener('click', () => {
+    changeLikes(cardElement, likeButton, _id);
   })
 };
 
 
-
 // Конструктор карточек
 function createCard({ name, link, _id, owner, likes }, myId) {
-  const cardElement = cardConstructor.querySelector('.element').cloneNode(true);
-  const elementImageContent = cardElement.querySelector('.element__image');
-  const likesCounter = cardElement.querySelector('.element__likes-counter')
-  const cardLikeButton = cardElement.querySelector('.element__like');
+  const cardElement = getTemplate();
+  const cardImage = cardElement.querySelector('.element__image');
   const cardDeleteButton = cardElement.querySelector('.element__delete-icon')
-  const popupViewerImage = document.querySelector('.popup__image');
-  const popupImageDescription = document.querySelector('.popup__image-description')
+  const likeButton = cardElement.querySelector('.element__like');
   cardElement.querySelector('.element__title').textContent = name;
-  elementImageContent.src = link;
-  elementImageContent.alt = name;
-  likesCounter.textContent = likes.length;
+  cardImage.src = link;
+  cardImage.alt = name;
 
-
-  // Проверка id лайков
-  if (likes.some((like) => like._id === myId)) {
-    cardLikeButton.classList.add('element__like_active');
-  } else {
-    cardLikeButton.classList.remove('element__like_active');
-  }
-
-  // Проверка id для кнопки удаления
-  if (owner._id !== myId) {
-    cardDeleteButton.classList.add('element__delete-icon_type_hidden')
-  }
-
-  setCardEventListener(cardElement, likesCounter, _id, popupViewerImage, popupImageDescription)
+  setCardEventListener(cardImage, cardDeleteButton, likeButton, { name, link }, _id, cardElement)
+  checkId(cardDeleteButton, owner, myId);
+  updateLikesView(cardElement, myId, likes)
 
   return cardElement;
 };
+
+
 
 export { createCard }

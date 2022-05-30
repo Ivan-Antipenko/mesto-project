@@ -1,4 +1,9 @@
-import { cardsSection } from './data'
+import {
+  cardsSection,
+  profileAvatar,
+  profileName,
+  profileAbout
+} from './data'
 
 
 // Выведение карточек на экран
@@ -20,4 +25,10 @@ function loading(isLoading, button) {
   }
 }
 
-export { renderCard, renderNewCard, loading }
+function confirmProfileData(userData) {
+  profileAvatar.src = userData.avatar;
+  profileName.textContent = userData.name;
+  profileAbout.textContent = userData.about;
+}
+
+export { renderCard, renderNewCard, loading, confirmProfileData }

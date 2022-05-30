@@ -2,11 +2,13 @@ import '../pages/index.css'
 
 import { disableButton } from './validate';
 
+import { deleteCard } from './api';
+
 import { openPopup, closePopup } from './modal'
 
 import { createCard } from './card';
 
-import { renderCard, renderNewCard, loading } from './utils'
+import { renderCard, renderNewCard, loading, confirmProfileData } from './utils'
 
 import {
   buttonEditProfile,
@@ -44,6 +46,8 @@ import {
   getCards,
   sendNewCard,
   sendAvatarLink,
+  sendLike,
+  deleteLike
 } from './api';
 
 
@@ -59,9 +63,9 @@ enableValidation({
 
 // Открытие попапа Edit
 function openEditPopup(popup) {
-  openPopup(popup);
   popupFormEditProfileFieldName.value = profileName.textContent;
   popupFormEditProfileFieldAbout.value = profileAbout.textContent;
+  openPopup(popup);
 };
 
 
@@ -101,6 +105,7 @@ function submitProfileAvatar(evt) {
       evt.target.reset();
       getProfileInfo();
     })
+    .catch(err => console.log(`Ошибка: ${err}`))
     .finally(() => {
       loading(false, avatarSubmitButton)
     })
@@ -117,12 +122,37 @@ function submitProfileChanges(evt) {
       profileAbout.textContent = popupFormEditProfileFieldAbout.value;
       closePopup(popupEdit);
     })
+    .catch(err => console.log(`Ошибка: ${err}`))
     .finally(() => {
       loading(false, profileSubmitButton)
     })
 };
 
+// Изменение лайков
+export function changeLikes(cardElement, button, _id) {
+  const likesCounter = cardElement.querySelector('.element__likes-counter')
+  button.classList.toggle('element__like_active')
+  if (button.classList.contains('element__like_active')) {
+    sendLike(_id)
+      .then((data) => {
+        likesCounter.textContent = data.likes.length;
+      })
+  } else if (!button.classList.contains('element__like_active')) {
+    deleteLike(_id)
+      .then((data) => {
+        likesCounter.textContent = data.likes.length;
+      })
+  }
+}
 
+// Удаление карточки
+export function requestDelete(_id, cardElement) {
+  deleteCard(_id)
+    .then(() => {
+      cardElement.remove();
+      cardElement = null;
+    })
+}
 
 // Добавление новой карточки
 function submitAddPlace(evt) {
@@ -137,6 +167,7 @@ function submitAddPlace(evt) {
       closePopup(popupAdd);
       evt.target.reset();
     })
+    .catch(err => console.log(`Ошибка: ${err}`))
     .finally(() => {
       loading(false, addButton)
     })
@@ -144,9 +175,7 @@ function submitAddPlace(evt) {
 
 Promise.all([getProfileInfo(), getCards()])
   .then(([userData, cardsData]) => {
-    profileAvatar.src = userData.avatar;
-    profileName.textContent = userData.name;
-    profileAbout.textContent = userData.about;
+    confirmProfileData(userData)
     const cardsArray = Array.from(cardsData)
     cardsArray.forEach((card) => {
       renderCard(createCard(card, userData._id, ));
