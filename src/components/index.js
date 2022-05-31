@@ -128,22 +128,24 @@ function submitProfileChanges(evt) {
     })
 };
 
-// Изменение лайков
-export function changeLikes(cardElement, button, _id) {
-  const likesCounter = cardElement.querySelector('.element__likes-counter')
-  button.classList.toggle('element__like_active')
+
+//
+export function setLikesUpdate(_id, likesCounter, button) {
   if (button.classList.contains('element__like_active')) {
     sendLike(_id)
       .then((data) => {
         likesCounter.textContent = data.likes.length;
       })
+      .catch(err => console.log(`Ошибка изменения статуса лайка: ${err}`));
   } else if (!button.classList.contains('element__like_active')) {
     deleteLike(_id)
       .then((data) => {
         likesCounter.textContent = data.likes.length;
       })
+      .catch(err => console.log(`Ошибка изменения статуса лайка: ${err}`));
   }
-}
+};
+
 
 // Удаление карточки
 export function requestDelete(_id, cardElement) {
@@ -152,6 +154,7 @@ export function requestDelete(_id, cardElement) {
       cardElement.remove();
       cardElement = null;
     })
+    .catch(err => console.log(`Ошибка удаления: ${err}`));
 }
 
 // Добавление новой карточки

@@ -3,8 +3,8 @@ import {
 } from './data';
 
 import {
-  changeLikes,
-  requestDelete
+  requestDelete,
+  setLikesUpdate
 } from './index'
 
 import { openPopup } from './modal'
@@ -16,6 +16,12 @@ function isLiked(likes, myId) {
   } else {
     return false
   }
+}
+
+export function changeLikes(cardElement, button, _id) {
+  const likesCounter = cardElement.querySelector('.element__likes-counter')
+  button.classList.toggle('element__like_active')
+  setLikesUpdate(_id, likesCounter, button)
 }
 
 // Открытие попапов изображений
