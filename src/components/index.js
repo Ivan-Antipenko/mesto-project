@@ -6,7 +6,7 @@ import { deleteCard } from './api';
 
 import { openPopup, closePopup } from './modal'
 
-import { createCard } from './card';
+import { createCard, deleteFromRender, changeLikesStatus } from './card';
 
 import { renderCard, renderNewCard, loading, confirmProfileData } from './utils'
 
@@ -129,21 +129,23 @@ function submitProfileChanges(evt) {
 };
 
 
-//
-export function setLikesUpdate(_id, likesCounter, button) {
-  if (button.classList.contains('element__like_active')) {
-    sendLike(_id)
-      .then((data) => {
-        likesCounter.textContent = data.likes.length;
-      })
-      .catch(err => console.log(`Ошибка изменения статуса лайка: ${err}`));
-  } else if (!button.classList.contains('element__like_active')) {
-    deleteLike(_id)
-      .then((data) => {
-        likesCounter.textContent = data.likes.length;
-      })
-      .catch(err => console.log(`Ошибка изменения статуса лайка: ${err}`));
-  }
+
+// Удаление лайка
+export function setLikesUpdateDelete(cardElement, button, _id) {
+  deleteLike(_id)
+    .then((data) => {
+      changeLikesStatus(cardElement, button, data)
+    })
+    .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
+}
+
+// Добавление лайка
+export function setLikesUpdateSend(cardElement, button, _id) {
+  sendLike(_id)
+    .then((data) => {
+      changeLikesStatus(cardElement, button, data)
+    })
+    .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
 };
 
 
@@ -151,11 +153,12 @@ export function setLikesUpdate(_id, likesCounter, button) {
 export function requestDelete(_id, cardElement) {
   deleteCard(_id)
     .then(() => {
-      cardElement.remove();
-      cardElement = null;
+      deleteFromRender(cardElement)
     })
     .catch(err => console.log(`Ошибка удаления: ${err}`));
-}
+
+};
+
 
 // Добавление новой карточки
 function submitAddPlace(evt) {

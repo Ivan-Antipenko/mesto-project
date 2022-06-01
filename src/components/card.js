@@ -4,7 +4,8 @@ import {
 
 import {
   requestDelete,
-  setLikesUpdate
+  setLikesUpdateSend,
+  setLikesUpdateDelete
 } from './index'
 
 import { openPopup } from './modal'
@@ -18,11 +19,22 @@ function isLiked(likes, myId) {
   }
 }
 
-export function changeLikes(cardElement, button, _id) {
+
+function checkLikeStatus(cardElement, button, _id) {
+  if (button.classList.contains('element__like_active')) {
+    setLikesUpdateDelete(cardElement, button, _id)
+  } else {
+    setLikesUpdateSend(cardElement, button, _id)
+  }
+}
+
+
+function changeLikesStatus(cardElement, button, data) {
   const likesCounter = cardElement.querySelector('.element__likes-counter')
   button.classList.toggle('element__like_active')
-  setLikesUpdate(_id, likesCounter, button)
+  likesCounter.textContent = data.likes.length;
 }
+
 
 // Открытие попапов изображений
 function openPreviewPicture(data) {
@@ -35,6 +47,7 @@ function openPreviewPicture(data) {
   openPopup(popupViewer);
 };
 
+
 // Изменение лайка в зависимости от наличия айди
 function updateLikesView(cardElement, myId, likes) {
   const likeButton = cardElement.querySelector('.element__like');
@@ -45,13 +58,21 @@ function updateLikesView(cardElement, myId, likes) {
   } else {
     likeButton.classList.remove('element__like_active');
   }
-}
+};
+
 
 // Проверка id для кнопки удаления
 function checkId(button, owner, myId) {
   if (owner._id !== myId) {
     button.classList.add('element__delete-icon_type_hidden')
   }
+}
+
+
+// Удаление карты из DOM
+function deleteFromRender(cardElement) {
+  cardElement.remove();
+  cardElement = null;
 }
 
 // Клонирование элемента
@@ -68,7 +89,7 @@ function setCardEventListener(cardImage, cardDeleteButton, likeButton, { name, l
     requestDelete(_id, cardElement);
   })
   likeButton.addEventListener('click', () => {
-    changeLikes(cardElement, likeButton, _id);
+    checkLikeStatus(cardElement, likeButton, _id);
   })
 };
 
@@ -83,13 +104,14 @@ function createCard({ name, link, _id, owner, likes }, myId) {
   cardImage.src = link;
   cardImage.alt = name;
 
-  setCardEventListener(cardImage, cardDeleteButton, likeButton, { name, link }, _id, cardElement)
+  setCardEventListener(cardImage, cardDeleteButton, likeButton, { name, link }, _id, cardElement, myId, likes)
   checkId(cardDeleteButton, owner, myId);
   updateLikesView(cardElement, myId, likes)
+
 
   return cardElement;
 };
 
 
 
-export { createCard }
+export { createCard, deleteFromRender, isLiked, changeLikesStatus }
