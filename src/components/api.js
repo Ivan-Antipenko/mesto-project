@@ -7,6 +7,93 @@ const config = {
   }
 }
 
+
+
+
+export class Api {
+  constructor(config){
+    this._baseUrl = config.baseUrl;
+    this._headers = config.headers;
+  }
+  _checkRequest(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`)
+  }
+  sendProfileInfo(name, about) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: 'PATCH',
+      headers: config.headers,
+      body: JSON.stringify({
+        name: name,
+        about: about,
+      })
+    })
+    .then(this._checkRequest)
+  }
+  getProfileInfo() {
+    return fetch(`${this._baseUrl}/users/me`, {
+        method: 'GET',
+        headers: this._headers,
+      })
+      .then(this._checkRequest)
+  }
+  getCards() {
+    return fetch(`${this._baseUrl}/cards`, {
+        method: "GET",
+        headers: this._headers,
+      })
+      .then(this._checkRequest)
+  };
+  sendAvatarLink(data) {
+    return fetch(`${this._baseUrl}/users/me/avatar`, {
+        method: 'PATCH',
+        headers: this._headers,
+        body: JSON.stringify({
+          avatar: data.link
+        })
+      })
+      .then(checkRequest)
+  };
+  sendNewCard(data) {
+    return fetch(`${this._baseUrl}/cards`, {
+        method: 'POST',
+        headers: this._headers,
+        
+        body: JSON.stringify({
+          name: data.name,
+          link: data.link,
+        })
+      })
+      .then(this._checkRequest)
+  };
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: this._headers
+      })
+      .then(this._checkRequest)
+  };
+  sendLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: this._headers
+      })
+      .then(checkRequest)
+  };
+  deleteLike(cardId) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: this._headers
+      })
+      .then(this._checkRequest)
+  };
+}
+
+
+
+
 // Проверка запроса
 function checkRequest(res) {
   if (res.ok) {
@@ -16,16 +103,16 @@ function checkRequest(res) {
 };
 
 // Отправка на сервер новых данных профиля
-function sendProfileInfo(name, about) {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      name: name,
-      about: about,
-    })
-  })
-}
+// function sendProfileInfo(name, about) {
+//   return fetch(`${config.baseUrl}/users/me`, {
+//     method: 'PATCH',
+//     headers: config.headers,
+//     body: JSON.stringify({
+//       name: name,
+//       about: about,
+//     })
+//   })
+//   }
 
 // Получение данных профиля
 function getProfileInfo() {
@@ -74,13 +161,13 @@ function sendNewCard(name, link) {
 
 
 // Удаление карточки
-function deleteCard(cardId) {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: config.headers
-    })
-    .then(checkRequest)
-};
+// function deleteCard(cardId) {
+//   return fetch(`${config.baseUrl}/cards/${cardId}`, {
+//       method: 'DELETE',
+//       headers: config.headers
+//     })
+//     .then(checkRequest)
+// };
 
 
 // Поставить лайк
@@ -103,12 +190,12 @@ function deleteLike(cardId) {
 };
 
 export {
-  sendProfileInfo,
+  // sendProfileInfo,
   sendNewCard,
   sendAvatarLink,
   getProfileInfo,
   getCards,
-  deleteCard,
+  // deleteCard,
   sendLike,
   deleteLike,
 }

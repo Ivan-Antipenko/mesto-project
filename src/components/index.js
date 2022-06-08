@@ -41,16 +41,23 @@ import {
 import { enableValidation } from './validate'
 
 import {
-  sendProfileInfo,
+  // sendProfileInfo,
   getProfileInfo,
   getCards,
   sendNewCard,
   sendAvatarLink,
   sendLike,
-  deleteLike
+  deleteLike,
+  Api
 } from './api';
 
-
+const api = new Api({
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-10',
+  headers: {
+    authorization: '6d23207f-ca89-460f-9fce-a2d606110ebd',
+    'Content-Type': 'application/json'
+  }
+}) 
 enableValidation({
   formSelector: '.popup__form',
   inputSelector: '.popup__form-input',
@@ -116,7 +123,7 @@ function submitProfileAvatar(evt) {
 function submitProfileChanges(evt) {
   evt.preventDefault();
   loading(true, profileSubmitButton)
-  sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
+  api.sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
     .then(() => {
       profileName.textContent = popupFormEditProfileFieldName.value;
       profileAbout.textContent = popupFormEditProfileFieldAbout.value;
@@ -151,7 +158,7 @@ export function setLikesUpdateSend(cardElement, button, _id) {
 
 // Удаление карточки
 export function requestDelete(_id, cardElement) {
-  deleteCard(_id)
+  api.deleteCard(_id)
     .then(() => {
       deleteFromRender(cardElement)
     })
