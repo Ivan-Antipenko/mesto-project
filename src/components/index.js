@@ -1,7 +1,7 @@
 import '../pages/index.css'
 
 import { disableButton } from './validate';
-
+import FormValidator from './validate';
 import { deleteCard } from './api';
 
 import { openPopup, closePopup } from './modal'
@@ -38,7 +38,7 @@ import {
 } from './data';
 
 
-import { enableValidation } from './validate'
+// import { enableValidation } from './validate'
 
 import {
   // sendProfileInfo,
@@ -58,14 +58,29 @@ const api = new Api({
     'Content-Type': 'application/json'
   }
 }) 
-enableValidation({
+
+
+
+
+const configEnableValidation = {
   formSelector: '.popup__form',
   inputSelector: '.popup__form-input',
   submitButtonSelector: '.popup__form-button',
   inactiveButtonClass: 'popup__form-button_type_disabled',
   invalidInput: 'popup__form-input_type_ivalid',
   errorClass: 'error_active'
-});
+};
+const popupEditForm = document.querySelector('.popup__form_edit-profile');
+const popupAvatarForm = document.querySelector('.popup__form_change-avatar');
+const popupAddForm = document.querySelector('.popup__form_add-place');
+const editFormValidation = new FormValidator(configEnableValidation, popupEditForm);
+const avatarFormValidation = new FormValidator(configEnableValidation,popupAvatarForm);
+const addFormValidation = new FormValidator(configEnableValidation, popupAddForm);
+//Включаем валидацию
+editFormValidation.enableValidation();
+avatarFormValidation.enableValidation();
+addFormValidation.enableValidation();
+
 
 
 // Открытие попапа Edit
