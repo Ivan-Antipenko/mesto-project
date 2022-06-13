@@ -59,8 +59,8 @@ const api = new Api({
   }
 }) 
 
-
-
+//======================================================================================
+//Настройки валидации форм
 
 const configEnableValidation = {
   formSelector: '.popup__form',
@@ -81,7 +81,7 @@ editFormValidation.enableValidation();
 avatarFormValidation.enableValidation();
 addFormValidation.enableValidation();
 
-
+//==================================================================================
 
 // Открытие попапа Edit
 function openEditPopup(popup) {
