@@ -2,11 +2,12 @@ import '../pages/index.css'
 
 import { disableButton } from './validate';
 
-import { deleteCard } from './api';
+import { Section } from './section';
+
 
 import { openPopup, closePopup } from './modal'
 
-import { createCard, deleteFromRender, changeLikesStatus } from './card';
+import { createCard, deleteFromRender, changeLikesStatus, Card } from './card';
 
 import { renderCard, renderNewCard, loading, confirmProfileData } from './utils'
 
@@ -43,8 +44,6 @@ import { enableValidation } from './validate'
 import {
   // sendProfileInfo,
   getProfileInfo,
-  getCards,
-  sendNewCard,
   sendAvatarLink,
   sendLike,
   deleteLike,
@@ -57,7 +56,7 @@ const api = new Api({
     authorization: '6d23207f-ca89-460f-9fce-a2d606110ebd',
     'Content-Type': 'application/json'
   }
-}) 
+})
 enableValidation({
   formSelector: '.popup__form',
   inputSelector: '.popup__form-input',
@@ -138,22 +137,26 @@ function submitProfileChanges(evt) {
 
 
 // Удаление лайка
-export function setLikesUpdateDelete(cardElement, button, _id) {
-  deleteLike(_id)
+export function setLikesUpdateDelete(id, element) {
+  api.deleteLike(id)
     .then((data) => {
-      changeLikesStatus(cardElement, button, data)
+      element.deleteLike(data)
     })
     .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
 }
 
 // Добавление лайка
-export function setLikesUpdateSend(cardElement, button, _id) {
-  sendLike(_id)
+export function handleLike(id, element) {
+  api.sendLike(id)
     .then((data) => {
-      changeLikesStatus(cardElement, button, data)
+      console.log(element.like)
     })
     .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
 };
+
+
+const card = new Card({})
+
 
 
 // Удаление карточки
@@ -163,7 +166,6 @@ export function requestDelete(_id, cardElement) {
       deleteFromRender(cardElement)
     })
     .catch(err => console.log(`Ошибка удаления: ${err}`));
-
 };
 
 
@@ -171,9 +173,12 @@ export function requestDelete(_id, cardElement) {
 function submitAddPlace(evt) {
   evt.preventDefault();
   loading(true, addButton)
-  Promise.all([sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value), getProfileInfo()])
+  Promise.all([api.sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value), api.getProfileInfo()])
     .then(([cardsData, userData]) => {
-      renderNewCard(createCard(cardsData, userData._id))
+      const newCard = new Card(cardsData, userData);
+      const newElement = newCard.createCard();
+      renderNewCard(newElement)
+        //renderNewCard(createCard(cardsData, userData._id))
     })
     .then(() => {
       disableButton(addButton);
@@ -186,15 +191,19 @@ function submitAddPlace(evt) {
     })
 }
 
-Promise.all([getProfileInfo(), getCards()])
+Promise.all([api.getProfileInfo(), api.getCards()])
   .then(([userData, cardsData]) => {
     confirmProfileData(userData)
     const cardsArray = Array.from(cardsData)
     cardsArray.forEach((card) => {
-      renderCard(createCard(card, userData._id, ));
+      const newCard = new Card(card, userData);
+      const newElement = newCard.createCard();
+      renderCard(newElement);
     })
   })
   .catch((err) => console.log(err));
+
+
 
 avatarForm.addEventListener('submit', submitProfileAvatar);
 popupFormAddPlace.addEventListener('submit', submitAddPlace);
