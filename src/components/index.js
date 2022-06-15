@@ -7,7 +7,8 @@ import { Section } from './section';
 
 import { openPopup, closePopup } from './modal'
 
-import { createCard, deleteFromRender, changeLikesStatus, Card } from './card';
+import { Card } from './card';
+//createCard, deleteFromRender, changeLikesStatus,
 
 import { renderCard, renderNewCard, loading, confirmProfileData } from './utils'
 
@@ -35,7 +36,8 @@ import {
   avatarForm,
   profileAvatar,
   avatarSubmitButton,
-  profileSubmitButton
+  profileSubmitButton,
+  cardsSection
 } from './data';
 
 
@@ -155,9 +157,6 @@ export function handleLike(id, element) {
 };
 
 
-const card = new Card({})
-
-
 
 // Удаление карточки
 export function requestDelete(_id, cardElement) {
@@ -167,6 +166,48 @@ export function requestDelete(_id, cardElement) {
     })
     .catch(err => console.log(`Ошибка удаления: ${err}`));
 };
+
+
+const cardList = new Section({
+  renderItems: (item) => {
+    cardList.addItem(createCardClass(item, '#card-constructor'));
+  }
+}, cardsSection)
+
+
+
+function createCardClass(data, cardSelector) {
+
+  const element = new Card(data, cardSelector, {
+
+    handleLikeDelete() {
+      api.deleteLike(element._id)
+        .then((data) => {
+          element.deletelike(data)
+        })
+        .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
+    },
+
+    requestDelete() {
+      api.deleteCard(element._id)
+        .then(() => {
+          deleteFromRender(cardElement)
+        })
+        .catch(err => console.log(`Ошибка удаления: ${err}`));
+    },
+
+    handleLike() {
+      api.sendLike(element._id)
+        .then((data) => {
+          element.like(data)
+        })
+        .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
+    }
+  })
+
+  const cardElement = element.createCard();
+  return cardElement;
+}
 
 
 // Добавление новой карточки
@@ -194,12 +235,7 @@ function submitAddPlace(evt) {
 Promise.all([api.getProfileInfo(), api.getCards()])
   .then(([userData, cardsData]) => {
     confirmProfileData(userData)
-    const cardsArray = Array.from(cardsData)
-    cardsArray.forEach((card) => {
-      const newCard = new Card(card, userData);
-      const newElement = newCard.createCard();
-      renderCard(newElement);
-    })
+    cardList.renderItems(cardsData.reverse());
   })
   .catch((err) => console.log(err));
 
