@@ -115,7 +115,7 @@ import { openPopup } from './modal'
 
 
 export class Card {
-  constructor(data, userData, { handleLike, handleLikeDelete, requestDelete }) {
+  constructor(data,cardConstructor,{userData, handleLike, handleLikeDelete, requestDelete }) {
     this._data = data;
     this._name = data.name;
     this._link = data.link;
@@ -123,10 +123,10 @@ export class Card {
     this._id = data._id;
     this._likes = data.likes;
     this._ownerId = data.owner._id;
-    this._userId = userData._id;
+    this._userId = userData;
 
 
-    //this._constructor = cardConstructor;
+    this._constructor = cardConstructor;
     this._handleLike = handleLike;
     this._handleLikeDelete = handleLikeDelete;
     this._requestDelete = requestDelete;
@@ -142,7 +142,7 @@ export class Card {
   // Создание элемента из темплейта
   _getElement() {
     const cardElement = document
-      .querySelector('#card-constructor')
+      .querySelector(this._constructor)
       .content
       .querySelector('.element')
       .cloneNode(true);
@@ -165,12 +165,13 @@ export class Card {
 
   like(data) {
     this._likeButton.classList.add('element__like_active');
-    this._element.querySelector('.element__likes-counter').textContent = this._getLikesCounter(data);
+    return this._element.querySelector('.element__likes-counter').textContent=`${data.likes.length}`
   };
 
   deleteLike(data) {
     this._likeButton.classList.remove('element__like_active');
-    this._element.querySelector('.element__likes-counter').textContent = this._getLikesCounter(data);
+    return this._element.querySelector('.element__likes-counter').textContent=`${data.likes.length}`
+    
   };
 
   _setEventListeners() {
