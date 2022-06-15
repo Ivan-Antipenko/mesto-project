@@ -183,7 +183,7 @@ function createCardClass(data, cardSelector) {
     handleLikeDelete() {
       api.deleteLike(element._id)
         .then((data) => {
-          element.deletelike(data)
+          element.deleteLike(data)
         })
         .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
     },

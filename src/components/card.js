@@ -127,8 +127,8 @@ export class Card {
 
 
     //this._constructor = cardConstructor;
-    this._handlelike = handleLike;
-    this._handlelikeDelete = handleLikeDelete;
+    this._handleLike = handleLike;
+    this._handleLikeDelete = handleLikeDelete;
     this._requestDelete = requestDelete;
   }
 
@@ -183,7 +183,7 @@ export class Card {
       if (!this._likeButton.classList.contains('element__like_active')) {
         this._handleLike();
       } else {
-        this._handleLikeDelete()
+        this._handleLikeDelete();
       }
     });
 
