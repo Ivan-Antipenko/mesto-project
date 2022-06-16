@@ -190,6 +190,7 @@ export class Card {
 
     this._deleteButton.addEventListener('click', () => {
       this._requestDelete();
+      this._deleteCard();
     });
 
   };
