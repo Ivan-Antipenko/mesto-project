@@ -116,14 +116,14 @@ function submitProfileAvatar(evt) {
     .finally(() => {
       loading(false, avatarSubmitButton)
     })
-  };
-  
-  
-  // Сохранение изменений профиля
-  function submitProfileChanges(evt) {
-    evt.preventDefault();
-    loading(true, profileSubmitButton)
-    api.sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
+};
+
+
+// Сохранение изменений профиля
+function submitProfileChanges(evt) {
+  evt.preventDefault();
+  loading(true, profileSubmitButton)
+  api.sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
     .then(() => {
       profileName.textContent = popupFormEditProfileFieldName.value;
       profileAbout.textContent = popupFormEditProfileFieldAbout.value;
@@ -133,37 +133,37 @@ function submitProfileAvatar(evt) {
     .finally(() => {
       loading(false, profileSubmitButton)
     })
-  };
-  
-  
-  
+};
+
+
+
 // Удаление лайка
 export function setLikesUpdateDelete(id, element) {
   api.deleteLike(id)
-  .then((data) => {
-    element.deleteLike(data)
-  })
-  .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
+    .then((data) => {
+      element.deleteLike(data)
+    })
+    .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
 }
 
 // Добавление лайка
 export function handleLike(id, element) {
   api.sendLike(id)
-  .then((data) => {
-    console.log(element.like)
-  })
+    .then((data) => {
+      console.log(element.like)
+    })
     .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
-  };
-  
-  
-  
-  // Удаление карточки
-  export function requestDelete(_id, cardElement) {
+};
+
+
+
+// Удаление карточки
+export function requestDelete(_id, cardElement) {
   api.deleteCard(_id)
-  .then(() => {
-    deleteFromRender(cardElement)
-  })
-  .catch(err => console.log(`Ошибка удаления: ${err}`));
+    .then(() => {
+      deleteFromRender(cardElement)
+    })
+    .catch(err => console.log(`Ошибка удаления: ${err}`));
 };
 
 
@@ -177,27 +177,27 @@ const cardList = new Section({
 let user = null;
 
 function createCardClass(data, cardSelector) {
-  
+
   const element = new Card(data, cardSelector, {
     userData: user._id,
     handleLikeDelete() {
       api.deleteLike(element._id)
-      .then((data) => {
-        element.deleteLike(data)
+        .then((data) => {
+          element.deleteLike(data)
         })
         .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
-      },
-      
-      requestDelete() {
-        api.deleteCard(element._id)
+    },
+
+    requestDelete() {
+      api.deleteCard(element._id)
         .then(() => {
           deleteFromRender(cardElement)
         })
         .catch(err => console.log(`Ошибка удаления: ${err}`));
-      },
-      
-      handleLike() {
-        api.sendLike(element._id)
+    },
+
+    handleLike() {
+      api.sendLike(element._id)
         .then((data) => {
           element.like(data)
         })
@@ -209,17 +209,14 @@ function createCardClass(data, cardSelector) {
   return cardElement;
 }
 
-
 // Добавление новой карточки
 function submitAddPlace(evt) {
   evt.preventDefault();
   loading(true, addButton)
-  Promise.all([api.sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value), api.getProfileInfo()])
-    .then(([cardsData, userData]) => {
-      const newCard = new Card(cardsData, userData);
-      const newElement = newCard.createCard();
-      renderNewCard(newElement)
-        //renderNewCard(createCard(cardsData, userData._id))
+  api.sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value)
+    .then((cardsData) => {
+      const cardElement = createCardClass(cardsData, '#card-constructor');
+      cardList.addItem(cardElement);
     })
     .then(() => {
       disableButton(addButton);
