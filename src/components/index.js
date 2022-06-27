@@ -1,14 +1,21 @@
-import '../pages/index.css'
+import "../pages/index.css";
 
-import { disableButton } from './validate';
+import { disableButton } from "./validate";
 
-import { deleteCard } from './api';
+import { deleteCard } from "./api";
 
-import { openPopup, closePopup } from './modal'
+// import { openPopup, closePopup } from './modal'
 
-import { createCard, deleteFromRender, changeLikesStatus } from './card';
+import PopupWithForm from "./PopupWithForm";
+import PopupWithImage from "./PopupWithImage";
+import { createCard, deleteFromRender, changeLikesStatus } from "./card";
 
-import { renderCard, renderNewCard, loading, confirmProfileData } from './utils'
+import {
+  renderCard,
+  renderNewCard,
+  loading,
+  confirmProfileData,
+} from "./utils";
 
 import {
   buttonEditProfile,
@@ -34,11 +41,10 @@ import {
   avatarForm,
   profileAvatar,
   avatarSubmitButton,
-  profileSubmitButton
-} from './data';
+  profileSubmitButton,
+} from "./data";
 
-
-import { enableValidation } from './validate'
+import { enableValidation } from "./validate";
 
 import {
   sendProfileInfo,
@@ -47,148 +53,143 @@ import {
   sendNewCard,
   sendAvatarLink,
   sendLike,
-  deleteLike
-} from './api';
-
+  deleteLike,
+} from "./api";
 
 enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__form-input',
-  submitButtonSelector: '.popup__form-button',
-  inactiveButtonClass: 'popup__form-button_type_disabled',
-  invalidInput: 'popup__form-input_type_ivalid',
-  errorClass: 'error_active'
+  formSelector: ".popup__form",
+  inputSelector: ".popup__form-input",
+  submitButtonSelector: ".popup__form-button",
+  inactiveButtonClass: "popup__form-button_type_disabled",
+  invalidInput: "popup__form-input_type_ivalid",
+  errorClass: "error_active",
 });
-
 
 // Открытие попапа Edit
 function openEditPopup(popup) {
   popupFormEditProfileFieldName.value = profileName.textContent;
   popupFormEditProfileFieldAbout.value = profileAbout.textContent;
   openPopup(popup);
-};
-
+}
 
 // Открытие и закрытие попапа edit
-buttonEditProfile.addEventListener('click', () => {
+buttonEditProfile.addEventListener("click", () => {
   openEditPopup(popupEdit);
 });
-buttonEditPopupClose.addEventListener('click', () => {
+buttonEditPopupClose.addEventListener("click", () => {
   closePopup(popupEdit);
 });
 
-
 // Открытие и закрытие остальных попапов
-buttonAddPlace.addEventListener('click', () => {
+buttonAddPlace.addEventListener("click", () => {
   openPopup(popupAdd);
 });
-buttonAddPopupClose.addEventListener('click', () => {
+buttonAddPopupClose.addEventListener("click", () => {
   closePopup(popupAdd);
 });
-buttonImagePopupClose.addEventListener('click', () => {
+buttonImagePopupClose.addEventListener("click", () => {
   closePopup(popupViewer);
 });
-avatarButton.addEventListener('click', () => {
-  openPopup(popupAvatar)
-})
-
+avatarButton.addEventListener("click", () => {
+  openPopup(popupAvatar);
+});
 
 // Смена аватарки
 function submitProfileAvatar(evt) {
   evt.preventDefault();
-  loading(true, avatarSubmitButton)
+  loading(true, avatarSubmitButton);
   sendAvatarLink(avatarInput.value)
     .then(() => {
-      profileAvatar.src = avatarInput.value
+      profileAvatar.src = avatarInput.value;
       closePopup(popupAvatar);
-      disableButton(avatarSubmitButton)
+      disableButton(avatarSubmitButton);
       evt.target.reset();
       getProfileInfo();
     })
-    .catch(err => console.log(`Ошибка: ${err}`))
+    .catch((err) => console.log(`Ошибка: ${err}`))
     .finally(() => {
-      loading(false, avatarSubmitButton)
-    })
-};
-
+      loading(false, avatarSubmitButton);
+    });
+}
 
 // Сохранение изменений профиля
 function submitProfileChanges(evt) {
   evt.preventDefault();
-  loading(true, profileSubmitButton)
-  sendProfileInfo(popupFormEditProfileFieldName.value, popupFormEditProfileFieldAbout.value)
+  loading(true, profileSubmitButton);
+  sendProfileInfo(
+    popupFormEditProfileFieldName.value,
+    popupFormEditProfileFieldAbout.value
+  )
     .then(() => {
       profileName.textContent = popupFormEditProfileFieldName.value;
       profileAbout.textContent = popupFormEditProfileFieldAbout.value;
       closePopup(popupEdit);
     })
-    .catch(err => console.log(`Ошибка: ${err}`))
+    .catch((err) => console.log(`Ошибка: ${err}`))
     .finally(() => {
-      loading(false, profileSubmitButton)
-    })
-};
-
-
+      loading(false, profileSubmitButton);
+    });
+}
 
 // Удаление лайка
 export function setLikesUpdateDelete(cardElement, button, _id) {
   deleteLike(_id)
     .then((data) => {
-      changeLikesStatus(cardElement, button, data)
+      changeLikesStatus(cardElement, button, data);
     })
-    .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
+    .catch((err) => console.log(`Ошибка статуса лайка: ${err}`));
 }
 
 // Добавление лайка
 export function setLikesUpdateSend(cardElement, button, _id) {
   sendLike(_id)
     .then((data) => {
-      changeLikesStatus(cardElement, button, data)
+      changeLikesStatus(cardElement, button, data);
     })
-    .catch(err => console.log(`Ошибка статуса лайка: ${err}`));
-};
-
+    .catch((err) => console.log(`Ошибка статуса лайка: ${err}`));
+}
 
 // Удаление карточки
 export function requestDelete(_id, cardElement) {
   deleteCard(_id)
     .then(() => {
-      deleteFromRender(cardElement)
+      deleteFromRender(cardElement);
     })
-    .catch(err => console.log(`Ошибка удаления: ${err}`));
-
-};
-
+    .catch((err) => console.log(`Ошибка удаления: ${err}`));
+}
 
 // Добавление новой карточки
 function submitAddPlace(evt) {
   evt.preventDefault();
-  loading(true, addButton)
-  Promise.all([sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value), getProfileInfo()])
+  loading(true, addButton);
+  Promise.all([
+    sendNewCard(popupFormPlaceNameField.value, popupFormPlaceLinkField.value),
+    getProfileInfo(),
+  ])
     .then(([cardsData, userData]) => {
-      renderNewCard(createCard(cardsData, userData._id))
+      renderNewCard(createCard(cardsData, userData._id));
     })
     .then(() => {
       disableButton(addButton);
       closePopup(popupAdd);
       evt.target.reset();
     })
-    .catch(err => console.log(`Ошибка: ${err}`))
+    .catch((err) => console.log(`Ошибка: ${err}`))
     .finally(() => {
-      loading(false, addButton)
-    })
+      loading(false, addButton);
+    });
 }
 
 Promise.all([getProfileInfo(), getCards()])
   .then(([userData, cardsData]) => {
-    confirmProfileData(userData)
-    const cardsArray = Array.from(cardsData)
+    confirmProfileData(userData);
+    const cardsArray = Array.from(cardsData);
     cardsArray.forEach((card) => {
-      renderCard(createCard(card, userData._id, ));
-    })
+      renderCard(createCard(card, userData._id));
+    });
   })
   .catch((err) => console.log(err));
 
-avatarForm.addEventListener('submit', submitProfileAvatar);
-popupFormAddPlace.addEventListener('submit', submitAddPlace);
-popupFormEditProfile.addEventListener('submit', submitProfileChanges);
+avatarForm.addEventListener("submit", submitProfileAvatar);
+popupFormAddPlace.addEventListener("submit", submitAddPlace);
+popupFormEditProfile.addEventListener("submit", submitProfileChanges);

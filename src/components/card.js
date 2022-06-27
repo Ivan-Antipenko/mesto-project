@@ -36,16 +36,16 @@ function changeLikesStatus(cardElement, button, data) {
 }
 
 
-// Открытие попапов изображений
-function openPreviewPicture(data) {
-  const popupViewer = document.querySelector('.popup-viewer')
-  const popupViewerImage = document.querySelector('.popup__image');
-  const popupImageDescription = document.querySelector('.popup__image-description')
-  popupViewerImage.src = data.link;
-  popupViewerImage.alt = data.name;
-  popupImageDescription.textContent = data.name;
-  openPopup(popupViewer);
-};
+// Открытие попапов изображений - публ класс PopupWithImage
+// function openPreviewPicture(data) {
+//   const popupViewer = document.querySelector('.popup-viewer')
+//   const popupViewerImage = document.querySelector('.popup__image');
+//   const popupImageDescription = document.querySelector('.popup__image-description')
+//   popupViewerImage.src = data.link;
+//   popupViewerImage.alt = data.name;
+//   popupImageDescription.textContent = data.name;
+//   openPopup(popupViewer);
+// };
 
 
 // Изменение лайка в зависимости от наличия айди
