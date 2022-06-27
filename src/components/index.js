@@ -1,16 +1,24 @@
-import '../pages/index.css'
+import "../pages/index.css";
 
 import { disableButton, FormValidator } from './validate';
 
 import { Section } from './section';
 
-import { Api } from './api';
+import { deleteCard, Api } from './api';
 
-import { openPopup, closePopup } from './modal'
-
-import { Card } from './card';
+// import { openPopup, closePopup } from './modal'
 
 import { loading, confirmProfileData } from './utils'
+import PopupWithForm from "./PopupWithForm";
+import PopupWithImage from "./PopupWithImage";
+import {  Card, createCard, deleteFromRender, changeLikesStatus } from "./card";
+
+import {
+  renderCard,
+  renderNewCard,
+  loading,
+  confirmProfileData,
+} from "./utils";
 
 import {
   buttonEditProfile,
@@ -73,38 +81,34 @@ addFormValidation.enableValidation();
 
 //==================================================================================
 
-
 // Открытие попапа Edit
 function openEditPopup(popup) {
   popupFormEditProfileFieldName.value = profileName.textContent;
   popupFormEditProfileFieldAbout.value = profileAbout.textContent;
   openPopup(popup);
-};
-
+}
 
 // Открытие и закрытие попапа edit
-buttonEditProfile.addEventListener('click', () => {
+buttonEditProfile.addEventListener("click", () => {
   openEditPopup(popupEdit);
 });
-buttonEditPopupClose.addEventListener('click', () => {
+buttonEditPopupClose.addEventListener("click", () => {
   closePopup(popupEdit);
 });
 
-
 // Открытие и закрытие остальных попапов
-buttonAddPlace.addEventListener('click', () => {
+buttonAddPlace.addEventListener("click", () => {
   openPopup(popupAdd);
 });
-buttonAddPopupClose.addEventListener('click', () => {
+buttonAddPopupClose.addEventListener("click", () => {
   closePopup(popupAdd);
 });
-buttonImagePopupClose.addEventListener('click', () => {
+buttonImagePopupClose.addEventListener("click", () => {
   closePopup(popupViewer);
 });
-avatarButton.addEventListener('click', () => {
-  openPopup(popupAvatar)
-})
-
+avatarButton.addEventListener("click", () => {
+  openPopup(popupAvatar);
+});
 
 // Смена аватарки
 function submitProfileAvatar(evt) {
@@ -112,18 +116,17 @@ function submitProfileAvatar(evt) {
   loading(true, avatarSubmitButton)
   api.sendAvatarLink(avatarInput.value)
     .then(() => {
-      profileAvatar.src = avatarInput.value
+      profileAvatar.src = avatarInput.value;
       closePopup(popupAvatar);
-      disableButton(avatarSubmitButton)
+      disableButton(avatarSubmitButton);
       evt.target.reset();
       api.getProfileInfo();
     })
-    .catch(err => console.log(`Ошибка: ${err}`))
+    .catch((err) => console.log(`Ошибка: ${err}`))
     .finally(() => {
-      loading(false, avatarSubmitButton)
-    })
-};
-
+      loading(false, avatarSubmitButton);
+    });
+}
 
 // Сохранение изменений профиля
 function submitProfileChanges(evt) {
@@ -135,13 +138,11 @@ function submitProfileChanges(evt) {
       profileAbout.textContent = popupFormEditProfileFieldAbout.value;
       closePopup(popupEdit);
     })
-    .catch(err => console.log(`Ошибка: ${err}`))
+    .catch((err) => console.log(`Ошибка: ${err}`))
     .finally(() => {
-      loading(false, profileSubmitButton)
-    })
-};
-
-
+      loading(false, profileSubmitButton);
+    });
+}
 
 const cardList = new Section({
   renderItems: (item) => {
@@ -199,10 +200,10 @@ function submitAddPlace(evt) {
       closePopup(popupAdd);
       evt.target.reset();
     })
-    .catch(err => console.log(`Ошибка: ${err}`))
+    .catch((err) => console.log(`Ошибка: ${err}`))
     .finally(() => {
-      loading(false, addButton)
-    })
+      loading(false, addButton);
+    });
 }
 
 Promise.all([api.getProfileInfo(), api.getCards()])
