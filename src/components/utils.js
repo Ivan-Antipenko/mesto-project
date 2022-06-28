@@ -18,13 +18,13 @@ function renderNewCard(cardElement) {
 };
 
 // описание в PopupWithForm
-// function loading(isLoading, button) {
-//   if (isLoading) {
-//     button.textContent = 'Сохранение...'
-//   } else {
-//     button.textContent = 'Сохранить'
-//   }
-// }
+function loading(isLoading, button) {
+  if (isLoading) {
+    button.textContent = 'Сохранение...'
+  } else {
+    button.textContent = 'Сохранить'
+  }
+}
 
 function confirmProfileData(userData) {
   profileAvatar.src = userData.avatar;
