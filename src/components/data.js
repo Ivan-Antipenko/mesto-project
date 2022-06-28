@@ -25,6 +25,12 @@ const avatarForm = document.querySelector('.popup__form_change-avatar'); // Фо
 const addButton = document.querySelector('.popup__form-button_add-place');
 const profileSubmitButton = document.querySelector('.popup__form-button-profile-submit');
 
+export const userData = {
+  userNameSelector: '.profile__name',
+  userAboutSelector: '.profile__about',
+  userAvatarSelector: '.profile__avatar'
+}
+
 export {
   cardConstructor,
   cardsSection,

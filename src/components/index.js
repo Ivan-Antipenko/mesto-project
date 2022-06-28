@@ -10,8 +10,10 @@ import { deleteCard, Api } from "./api";
 import UserInfo from "./UserInfo";
 
 import { loading, confirmProfileData } from "./utils";
+
 import PopupWithForm from "./PopupWithForm";
 import PopupWithImage from "./PopupWithImage";
+
 import { Card, createCard, deleteFromRender, changeLikesStatus } from "./card";
 
 // check it
@@ -43,8 +45,8 @@ import {
   avatarSubmitButton,
   profileSubmitButton,
   cardsSection,
+  userData,
 } from "./data";
-import UserInfo from "./UserInfo";
 
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-10",
@@ -86,20 +88,20 @@ addFormValidation.enableValidation();
 
 //==================================================================================
 
-// Открытие попапа Edit
-function openEditPopup(popup) {
-  popupFormEditProfileFieldName.value = profileName.textContent;
-  popupFormEditProfileFieldAbout.value = profileAbout.textContent;
-  openPopup(popup);
-}
+// // Открытие попапа Edit
+// function openEditPopup(popup) {
+//   popupFormEditProfileFieldName.value = profileName.textContent;
+//   popupFormEditProfileFieldAbout.value = profileAbout.textContent;
+//   openPopup(popup);
+// }
 
-// Открытие и закрытие попапа edit
-buttonEditProfile.addEventListener("click", () => {
-  openEditPopup(popupEdit);
-});
-buttonEditPopupClose.addEventListener("click", () => {
-  closePopup(popupEdit);
-});
+// // Открытие и закрытие попапа edit
+// buttonEditProfile.addEventListener("click", () => {
+//   openEditPopup(popupEdit);
+// });
+// buttonEditPopupClose.addEventListener("click", () => {
+//   closePopup(popupEdit);
+// });
 
 // Открытие и закрытие остальных попапов
 buttonAddPlace.addEventListener("click", () => {
@@ -221,7 +223,40 @@ function submitAddPlace(evt) {
     });
 }
 
-const userData = new UserInfo();
+const userInfo = new UserInfo(userData);
+const editPopup = new PopupWithForm(".popup-edit", editFormSubmitHandler);
+
+const editFormSubmitHandler = (data) => {
+  editPopup.renderLoading(true);
+  api
+    .sendProfileInfo(data)
+    .then((res) => {
+      userData.setUserInfo(res);
+    })
+    .then(() => {
+      editPopup.closePopup();
+    })
+    .catch((err) => console.log(`Error: ${err}`))
+    .finally(() => {
+      editPopup.renderLoading(false);
+    });
+};
+
+// const addPopup = new PopupWithForm(popupSelectors.addPopupSelector, addFormSubmitHandler);
+// const imagePopup = new PopupWithImage(popupSelectors.imagePopupSelector);
+
+editPopup.setEventListeners();
+// addPopup.setEventListeners();
+// imagePopup.setEventListeners();
+// editAvatarPopup.setEventListeners();
+
+buttonEditProfile.addEventListener("click", function () {
+  const userData = userInfo.getUserInfo();
+  popupFormEditProfileFieldName.value = userData.name;
+  popupFormEditProfileFieldAbout.value = userData.about;
+  editPopup.openPopup();
+  editFormValidation.setInitialState();
+});
 
 Promise.all([api.getProfileInfo(), api.getCards()])
   .then(([userData, cardsData]) => {
