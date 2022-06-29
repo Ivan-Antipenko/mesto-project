@@ -21,13 +21,13 @@ export class Api {
     return Promise.reject(`Ошибка: ${res.status}`)
   }
 
-  sendProfileInfo(name, about) {
+  sendProfileInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
-          name: name,
-          about: about,
+          name: data.name,
+          about: data.about,
         })
       })
       .then(this._checkRequest)
