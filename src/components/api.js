@@ -1,14 +1,4 @@
-// Конфиг
-const config = {
-  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-10',
-  headers: {
-    authorization: '6d23207f-ca89-460f-9fce-a2d606110ebd',
-    'Content-Type': 'application/json'
-  }
-}
-
-
-export class Api {
+export default class Api {
   constructor(config) {
     this._baseUrl = config.baseUrl;
     this._headers = config.headers;
@@ -24,7 +14,7 @@ export class Api {
   sendProfileInfo(data) {
     return fetch(`${this._baseUrl}/users/me`, {
         method: 'PATCH',
-        headers: config.headers,
+        headers: this._headers,
         body: JSON.stringify({
           name: data.name,
           about: data.about,

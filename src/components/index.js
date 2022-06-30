@@ -1,21 +1,17 @@
 import "../pages/index.css";
 
-import { FormValidator } from "./validate";
+import FormValidator from "./Validate";
 
-import { Section } from "./section";
+import Section from "./Section";
 
-import { Api } from "./api";
+import Api from "./Api";
 
-import { UserInfo } from "./UserInfo";
+import UserInfo from "./UserInfo";
 
-import { confirmProfileData } from "./utils";
+import PopupWithForm from "./PopupWithForm";
+import PopupWithImage from "./PopupWithImage";
 
-import { PopupWithForm } from "./PopupWithForm";
-import { PopupWithImage } from "./PopupWithImage";
-
-import { Card } from "./card";
-
-
+import Card from "./Card";
 
 import {
   buttonEditProfile,
@@ -25,7 +21,7 @@ import {
   avatarButton,
   cardsSection,
   userData,
-} from "./data";
+} from "./Data";
 
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-10",
@@ -67,14 +63,14 @@ addFormValidation.enableValidation();
 
 let user = null;
 
-const cardList = new Section({
+const cardList = new Section(
+  {
     renderItems: (item) => {
       cardList.addItem(createCardClass(item, "#card-constructor"));
     },
   },
   cardsSection
 );
-
 
 // Cоздание элемента класса Card
 function createCardClass(data, cardSelector) {
@@ -108,23 +104,20 @@ function createCardClass(data, cardSelector) {
     },
 
     handleImageClick() {
-      imagePopup.openPopup(data)
-    }
+      imagePopup.openPopup(data);
+    },
   });
 
   const cardElement = element.createCard();
   return cardElement;
 }
 
-
 const userInfo = new UserInfo(userData);
-
+// Создание объектов классов Popup
 const editPopup = new PopupWithForm(".popup-edit", editFormSubmitHandler);
 const addPopup = new PopupWithForm(".popup-add", addFormSubmitHandler);
 const imagePopup = new PopupWithImage(".popup-viewer");
 const avatarPopup = new PopupWithForm(".popup-avatar", changeAvatarHandler);
-
-
 
 // Изменение профиля
 function editFormSubmitHandler(data) {
@@ -141,8 +134,7 @@ function editFormSubmitHandler(data) {
     .finally(() => {
       editPopup.renderLoading(false);
     });
-};
-
+}
 
 // Добавление карты
 function addFormSubmitHandler(data) {
@@ -166,9 +158,10 @@ function addFormSubmitHandler(data) {
 // Изменение аватара
 function changeAvatarHandler(data) {
   avatarPopup.renderLoading(true);
-  api.sendAvatarLink(data)
+  api
+    .sendAvatarLink(data)
     .then((res) => {
-      userInfo.setUserAvatar(res)
+      userInfo.setUserAvatar(res);
     })
     .then(() => {
       avatarPopup.disableButton();
@@ -180,36 +173,32 @@ function changeAvatarHandler(data) {
     });
 }
 
-
-buttonAddPlace.addEventListener('click', () => {
+buttonAddPlace.addEventListener("click", () => {
   addPopup.openPopup();
-})
+});
 
-buttonEditProfile.addEventListener('click', () => {
+buttonEditProfile.addEventListener("click", () => {
   const { name, about } = userInfo.getUserInfo();
   popupFormEditProfileFieldName.value = name;
   popupFormEditProfileFieldAbout.value = about;
   editFormValidation.setInitialState();
   editPopup.openPopup();
-})
+});
 
-avatarButton.addEventListener('click', () => {
+avatarButton.addEventListener("click", () => {
   avatarPopup.openPopup();
-})
-
-
-
+});
 
 editPopup.setEventListeners();
 addPopup.setEventListeners();
 imagePopup.setEventListeners();
 avatarPopup.setEventListeners();
 
-
 Promise.all([api.getProfileInfo(), api.getCards()])
   .then(([userData, cardsData]) => {
     user = userData;
-    confirmProfileData(userData);
+    userInfo.setUserInfo(userData);
+    userInfo.setUserAvatar(userData);
     cardList.renderItems(cardsData.reverse());
   })
   .catch((err) => console.log(err));
