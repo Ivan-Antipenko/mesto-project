@@ -76,9 +76,9 @@ export default class FormValidator {
   }
   //Удаление ошибки при новом открытие окна
   setInitialState() {
+    this._toggleButtonState();
     this._inputList.forEach((input) => {
       this._hideError(input);
-      this._toggleButtonState();
     });
   }
   //Включение валидации
