@@ -1,5 +1,5 @@
 export class Card {
-  constructor(data, cardConstructor, { userData, handleLike, handleLikeDelete, requestDelete }) {
+  constructor(data, cardConstructor, { userData, handleLike, handleLikeDelete, requestDelete, handleImageClick }) {
     this._data = data;
     this._name = data.name;
     this._link = data.link;
@@ -14,6 +14,7 @@ export class Card {
     this._handleLike = handleLike;
     this._handleLikeDelete = handleLikeDelete;
     this._requestDelete = requestDelete;
+    this._handleImageClick = handleImageClick;
   }
 
   // Проверка id для кнопки удаления
@@ -60,9 +61,9 @@ export class Card {
 
   _setEventListeners() {
 
-    // this._image.addEventListener('click', () => {
-    //  this._handleCardClick();
-    // })
+    this._image.addEventListener('click', () => {
+    this._handleImageClick();
+    })
 
     this._likeButton.addEventListener('click', () => {
       if (!this._likeButton.classList.contains('element__like_active')) {
@@ -74,14 +75,13 @@ export class Card {
 
     this._deleteButton.addEventListener('click', () => {
       this._requestDelete();
-      this._deleteCard();
+      this.deleteCard();
     });
 
   };
 
   deleteCard() {
     this._element.remove();
-    this._element = null;
   }
 
   // Конструктор карт

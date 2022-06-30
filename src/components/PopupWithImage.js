@@ -10,17 +10,17 @@ export default class PopupWithImage extends Popup {
     super(popupSelector);
 
     this._popupViewerImage = this._popup.querySelector(
-      PopupWithImage.selectors.popupImage
+      PopupWithImage.selectors.popupViewerImage
     );
     this._popupImageDescription = this._popup.querySelector(
       PopupWithImage.selectors.popupImageDescription
     );
   }
 
-  openPopup(data) {
-    this._popupImageDescription.textContent = data.name;
-    this._popupViewerImage.src = data.link;
-    this._popupViewerImage.alt = data.alt;
+  openPopup({name, link}) {
+    this._popupImageDescription.textContent = name;
+    this._popupViewerImage.src = link;
+    this._popupViewerImage.alt = name;
     super.openPopup();
   }
 }

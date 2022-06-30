@@ -82,9 +82,3 @@ export class FormValidator {
     this._setEventListener();
   }
 }
-
-// Отключение кнопки
-export function disableButton(button) {
-  button.disabled = true;
-  button.classList.add('popup__form-button_type_disabled');
-};
