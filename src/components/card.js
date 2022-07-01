@@ -47,17 +47,17 @@ export default class Card {
   }
 
   _getLikesCounter() {
-    this._counter = this._likes.length;
+    this._counter.textContent = this._likes.length;
   }
 
   like(data) {
     this._likeButton.classList.add("element__like_active");
-    return (this._counter = `${data.likes.length}`);
+    return (this._counter.textContent = `${data.likes.length}`);
   }
 
   deleteLike(data) {
     this._likeButton.classList.remove("element__like_active");
-    return (this._counter = `${data.likes.length}`);
+    return (this._counter.textContent = `${data.likes.length}`);
   }
 
   _setEventListeners() {
@@ -87,8 +87,8 @@ export default class Card {
     this._element = this._getElement();
     this._image = this._element.querySelector(".element__image");
     this._deleteButton = this._element.querySelector(".element__delete-icon");
+    this._counter = this._element.querySelector(".element__likes-counter");
     this._likeButton = this._element.querySelector(".element__like");
-    this._counter = this._element.querySelector(".element__likes-counter").textContent;
     this._element.querySelector(".element__title").textContent = this._name;
     this._image.src = this._link;
     this._image.alt = this._name;
