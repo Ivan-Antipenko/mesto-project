@@ -163,8 +163,7 @@ function changeAvatarHandler(data) {
     .then((res) => {
       userInfo.setUserAvatar(res);
     })
-    .then(() => {
-      avatarPopup.disableButton();
+    .then(() => {   
       avatarPopup.closePopup();
     })
     .catch((err) => console.log(`Ошибка: ${err}`))
@@ -175,18 +174,20 @@ function changeAvatarHandler(data) {
 
 buttonAddPlace.addEventListener("click", () => {
   addPopup.openPopup();
+  addFormValidation.setInitialState();
 });
 
 buttonEditProfile.addEventListener("click", () => {
   const { name, about } = userInfo.getUserInfo();
   popupFormEditProfileFieldName.value = name;
   popupFormEditProfileFieldAbout.value = about;
-  editFormValidation.setInitialState();
   editPopup.openPopup();
+  editFormValidation.setInitialState();
 });
 
 avatarButton.addEventListener("click", () => {
   avatarPopup.openPopup();
+  avatarFormValidation.setInitialState();
 });
 
 editPopup.setEventListeners();
