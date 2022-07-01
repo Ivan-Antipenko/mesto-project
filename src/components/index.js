@@ -1,6 +1,6 @@
 import "../pages/index.css";
 
-import FormValidator from "./Validate";
+import FormValidator from "./FormValidator";
 
 import Section from "./Section";
 
@@ -21,7 +21,11 @@ import {
   avatarButton,
   cardsSection,
   userData,
-} from "./Data";
+  configEnableValidation,
+  popupEditForm,
+  popupAvatarForm,
+  popupAddForm,
+} from "../utils/data";
 
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-10",
@@ -31,18 +35,6 @@ const api = new Api({
   },
 });
 
-//Настройки валидации форм
-const configEnableValidation = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__form-input",
-  submitButtonSelector: ".popup__form-button",
-  inactiveButtonClass: "popup__form-button_type_disabled",
-  invalidInput: "popup__form-input_type_ivalid",
-  errorClass: "error_active",
-};
-const popupEditForm = document.querySelector(".popup__form_edit-profile");
-const popupAvatarForm = document.querySelector(".popup__form_change-avatar");
-const popupAddForm = document.querySelector(".popup__form_add-place");
 const editFormValidation = new FormValidator(
   configEnableValidation,
   popupEditForm
@@ -114,13 +106,13 @@ function createCardClass(data, cardSelector) {
 
 const userInfo = new UserInfo(userData);
 // Создание объектов классов Popup
-const editPopup = new PopupWithForm(".popup-edit", editFormSubmitHandler);
+const editPopup = new PopupWithForm(".popup-edit", handleProfileFormSubmit);
 const addPopup = new PopupWithForm(".popup-add", addFormSubmitHandler);
 const imagePopup = new PopupWithImage(".popup-viewer");
 const avatarPopup = new PopupWithForm(".popup-avatar", changeAvatarHandler);
 
 // Изменение профиля
-function editFormSubmitHandler(data) {
+function handleProfileFormSubmit(data) {
   editPopup.renderLoading(true);
   api
     .sendProfileInfo(data)
