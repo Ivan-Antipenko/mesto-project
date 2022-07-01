@@ -146,7 +146,6 @@ function addFormSubmitHandler(data) {
       cardList.addItem(cardElement);
     })
     .then(() => {
-      addPopup.disableButton();
       addPopup.closePopup();
     })
     .catch((err) => console.log(`Ошибка: ${err}`))
@@ -163,7 +162,7 @@ function changeAvatarHandler(data) {
     .then((res) => {
       userInfo.setUserAvatar(res);
     })
-    .then(() => {   
+    .then(() => {
       avatarPopup.closePopup();
     })
     .catch((err) => console.log(`Ошибка: ${err}`))
